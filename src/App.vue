@@ -1,17 +1,26 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <router-view></router-view>
+    <van-tabbar route>
+      <van-tabbar-item replace to="/" icon="home-o">
+        首页
+      </van-tabbar-item>
+      <van-tabbar-item replace to="/add" icon="plus">
+        发布
+      </van-tabbar-item>
+    </van-tabbar>    
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import {Button, Tabbar, TabbarItem} from 'vant'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    [Button.name]: Button,
+    [Tabbar.name]: Tabbar,
+    [TabbarItem.name]: TabbarItem,
   }
 }
 </script>
@@ -23,6 +32,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  /*margin-top: 60px;*/
 }
 </style>
