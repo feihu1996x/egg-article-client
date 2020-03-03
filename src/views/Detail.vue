@@ -7,18 +7,32 @@
     </div>
 </template>
 <script>
+import { Toast } from 'vant';
+import moment from 'moment';
 export default {
     data() {
         return {
             detail: {
-                id: 2,
-                title: '编程必备基础知识 计算机组成原理+操作系统+计算机网络',
-                img: 'https://img2.mukewang.com/szimg/5d1032ab08719e0906000338.jpg',
-                summary: '介绍编程必备基础知识',
-                content: '快速、系统补足必备的计算机系统知识，更快更有趣、更贴近实际工作，让你更快地学到满足实际工作需要的知识，为以后的工作打下良好的基础',
-                createTime: '2019-08-10 10:20:20',
+                id: undefined,
+                title: undefined,
+                img: undefined,
+                summary: undefined,
+                content: undefined,
+                createTime: undefined,
             }
         }
+    },
+    created() {
+        fetch(`/article/detail/${this.$route.query.id}`)
+        .then(res => res.json())
+        .then(res => {
+            if (200 === res.status) {
+                this.detail = res.data;
+                this.detail.createTime = this.detail.createTime ? moment(this.detail.createTime).format('YYYY-MM-DD HH:mm:ss') : undefined;  
+            } else {
+                Toast.fail(res.errMsg);
+            }
+        })
     }
 }
 </script>

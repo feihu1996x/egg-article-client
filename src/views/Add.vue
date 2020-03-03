@@ -14,7 +14,7 @@
     </div>
 </template>
 <script>
-import { Uploader, CellGroup, Field, Button } from 'vant'
+import { Uploader, CellGroup, Field, Button, Toast } from 'vant'
 export default {
     components: {
         [Uploader.name]: Uploader,
@@ -44,6 +44,22 @@ export default {
                 content: this.content
             };
             console.log(data);
+            fetch('/article/create', {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(res => res.json())
+            .then(res => {
+                if (200 === res.status) {
+                    Toast.success('文章发布成功');
+                    this.$router.push('/');
+                } else {
+                    Toast.fail(res.errMsg);
+                }
+            })
         }
     }
 }

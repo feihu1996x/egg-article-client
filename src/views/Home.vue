@@ -21,7 +21,8 @@
     </div>
 </template>
 <script>
-import { List, Cell } from 'vant';
+import { List, Cell, Toast } from 'vant';
+import moment from 'moment';
 export default {
     components: {
         [List.name]: List,
@@ -36,28 +37,22 @@ export default {
     },
     methods: {
         onLoad() {
-            setTimeout(() => {
-                this.loading = false,
-                this.finished = true,
-                this.list = [
-                    {
-                        id: 1,
-                        title: '编程必备基础知识 计算机组成原理+操作系统+计算机网络',
-                        img: 'https://img2.mukewang.com/szimg/5d1032ab08719e0906000338.jpg',
-                        summary: '介绍编程必备基础知识',
-                        content: '快速、系统补足必备的计算机系统知识，更快更有趣、更贴近实际工作，让你更快地学到满足实际工作需要的知识，为以后的工作打下良好的基础',
-                        createTime: '2019-08-10 10:20:20',
-                    },
-                    {
-                        id: 2,
-                        title: '编程必备基础知识 计算机组成原理+操作系统+计算机网络',
-                        img: 'https://img2.mukewang.com/szimg/5d1032ab08719e0906000338.jpg',
-                        summary: '介绍编程必备基础知识',
-                        content: '快速、系统补足必备的计算机系统知识，更快更有趣、更贴近实际工作，让你更快地学到满足实际工作需要的知识，为以后的工作打下良好的基础',
-                        createTime: '2019-08-10 10:20:20',
-                    },                    
-                ]
-            }, 1000)
+            fetch('/article/list')
+            .then(res => res.json())
+            .then(res => {
+                if (200 === res.status) {
+                    this.loading = false;
+                    this.finished = true;
+                    this.list = res.data.map(item => {
+                        if (item.createTime) {
+                            item.createTime = moment(item.createTime).format('YYYY-MM-DD HH:mm:ss');
+                        }
+                        return item;
+                    });                    
+                } else {
+                    Toast.fail(res.errMsg);
+                }
+            });
         },
         handleClick(id) {
             this.$router.push({
